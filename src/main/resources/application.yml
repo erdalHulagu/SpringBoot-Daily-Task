@@ -3,6 +3,8 @@ server:
  error:
   include-binding-errors: always
   include-message: always
+  include-stacktrace: never
+  
 spring: 
  main:
   allow-circular-references: true # 8 ve 9 yeni eklendi

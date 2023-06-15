@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,6 +19,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.service.annotation.DeleteExchange;
+
 import com.java.dailyTasks.domain.User;
 import com.java.dailyTasks.reguestBody.UserRequest;
 import com.java.dailyTasks.response.Response;
@@ -25,6 +28,7 @@ import com.java.dailyTasks.response.ResponseMessage;
 import com.java.dailyTasks.service.UserService;
 
 import jakarta.validation.Valid;
+import lombok.Delegate;
 
 @RestController
 @RequestMapping("/users")
@@ -94,6 +98,21 @@ public class UserController {
 		 return ResponseEntity.ok(updateduser);
 		
 	}
+	
+	@DeleteMapping("{id}")
+	public ResponseEntity<Response> deleteUser(@PathVariable Long id){
+		
+		userService.deleteUserWithId(id);
+		Response response = new Response();
+		 response.setMessage(ResponseMessage.USER_DELETED);
+		
+		return ResponseEntity.ok(response);
+		
+		
+	
+	}
+	
+	
 }
 
 
