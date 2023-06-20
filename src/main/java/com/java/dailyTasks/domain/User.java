@@ -2,22 +2,18 @@ package com.java.dailyTasks.domain;
 
 
 import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
-
-import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.format.annotation.DateTimeFormat;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
+import java.util.Set;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -59,9 +55,9 @@ private String city;
 @Size(min = 10, max = 80)
 @Column(length = 80, nullable = false, unique=true)
 private String email;
-
+//
 //@Column
-//private String image;
+//private Long image;
 
 //@Pattern(regexp = "\\\\d{3}-\\\\d{3}-\\\\d{4}",	// 999-999-9999
 //message = "Please provide valid phone number" ) 
@@ -74,7 +70,9 @@ private String email;
 private LocalDateTime createAt;
 
 
-
+@OneToMany(orphanRemoval = true)
+@JoinColumn(name="userId")
+private Set<Image> image;
 
 
 }

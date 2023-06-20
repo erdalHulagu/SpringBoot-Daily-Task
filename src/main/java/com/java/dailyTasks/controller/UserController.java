@@ -2,6 +2,7 @@ package com.java.dailyTasks.controller;
 
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,14 +22,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.service.annotation.DeleteExchange;
 
+import com.java.dailyTasks.DTO.UserDTO;
+import com.java.dailyTasks.domain.Image;
 import com.java.dailyTasks.domain.User;
-import com.java.dailyTasks.reguestBody.UserRequest;
+import com.java.dailyTasks.request.UserRequest;
 import com.java.dailyTasks.response.Response;
 import com.java.dailyTasks.response.ResponseMessage;
 import com.java.dailyTasks.service.UserService;
 
 import jakarta.validation.Valid;
-import lombok.Delegate;
 
 @RestController
 @RequestMapping("/users")
@@ -38,9 +40,9 @@ public class UserController {
     private UserService userService;
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<User> getUser(@PathVariable Long id){
+	public ResponseEntity<UserDTO> getUser(@PathVariable Long id){
 		
-		User user=userService.getUserById(id);
+		UserDTO user=userService. getUserById(id);
 		
 		return ResponseEntity.ok(user);
 	
@@ -68,31 +70,33 @@ public class UserController {
 	
 	//get all users
 	@GetMapping
-	public ResponseEntity<List<User>>getAllUser(){
+	public ResponseEntity<List<UserDTO>>getAllUser(){
    
 
 		
-		List<User> users = userService.getAll();
+		List<UserDTO> users = userService.getAll();
 		
 
 		return ResponseEntity.ok(users);
 		
 	}
 	// create user
-	@PostMapping("/admin")
+	@PostMapping("/admin/{imageId}")
 	
-	public ResponseEntity<String> createUser(@Validated  @RequestBody User user){
-		userService.createUser(user);
-		String message="User created succesfully";
-		return ResponseEntity.ok(message);
+	public ResponseEntity<Response> createUser(@Validated  @RequestBody  UserDTO userDTO, @PathVariable Long imageId) {
+		userService.createUser(userDTO, imageId);
+		Response response = new  Response();
+		response.setMessage(ResponseMessage.USER_CREATED);
+		response.setSuccess(true);
+		return ResponseEntity.ok(response);
 		
 		
 	}
 	@PutMapping("{id}")
 	
-	public ResponseEntity<User> upDateUser(@Validated @PathVariable Long id, @RequestBody UserRequest userRequest){
+	public ResponseEntity<UserDTO> upDateUser(@Validated @PathVariable Long id, @RequestBody UserRequest userRequest){
 		
-		 User updateduser = userService.updateUser(id,userRequest);
+		 UserDTO updateduser = userService.updateUser(id,userRequest);
 		 Response response = new Response();
 		 response.setMessage(ResponseMessage.USER_UPDATED_MESSAGE);
 		 return ResponseEntity.ok(updateduser);
@@ -111,6 +115,17 @@ public class UserController {
 		
 	
 	}
+	@GetMapping("{email}")
+	public ResponseEntity<UserDTO> getUserByEmailEntity (@PathVariable User email){
+		
+	UserDTO  emaillUser = userService.getUserByEmail(email);
+	
+	return ResponseEntity.ok(emaillUser);
+	
+		
+		
+		
+		}
 	
 	
 }

@@ -19,6 +19,8 @@ public class ErrorMessage {
 	public final static String IMAGE_USED_MESSAGE = "ImageFile is used by other car";
 
 	public static final String EMAIL_IS_NOT_MATCH ="Enter valid email please";
+
+	public static final String EMAIL_NOT_FOUND = "Email not found";
 	
 	
 	

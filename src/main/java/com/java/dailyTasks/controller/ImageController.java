@@ -1,11 +1,14 @@
 package com.java.dailyTasks.controller;
 
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.java.dailyTasks.domain.Image;
 import com.java.dailyTasks.response.ImageSavedResponse;
 import com.java.dailyTasks.response.Response;
 import com.java.dailyTasks.response.ResponseMessage;
@@ -35,8 +38,8 @@ public class ImageController {
 
 	}
 
-		@GetMapping("/{id}")
-		public ResponseEntity<byte[]> downloadImage(@PathVariable Long id)throws IOException{
+		@GetMapping("/image/{id}")
+		public ResponseEntity<byte[]> saveImage(@PathVariable Long id)throws IOException{
 			byte[] imageData=imageService.getImage(id);
 			
 //			 HttpHeaders header = new HttpHeaders();
@@ -67,9 +70,9 @@ public class ImageController {
 			return ResponseEntity.ok().body(uploadImage);
 		}
 
-		@GetMapping("/{fileName}")
-		public ResponseEntity<byte[]> downloadImageFromFileSystem(@PathVariable String fileName) throws IOException {
-			byte[] imageData=imageService.downloadImageFromFileSystem(fileName);
+		@GetMapping("/{id}")
+		public ResponseEntity<byte[]> downloadImageFromFileSystem(@PathVariable Long id) throws IOException {
+			byte[] imageData=imageService.downloadImageFromFileSystem(id);
 			return ResponseEntity.ok().contentType(MediaType.valueOf("image/png")).body(imageData);
 
 		}

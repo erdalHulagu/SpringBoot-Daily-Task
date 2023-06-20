@@ -1,6 +1,7 @@
-package com.java.dailyTasks.reguestBody;
+package com.java.dailyTasks.request;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.Email;
@@ -20,6 +21,7 @@ import lombok.Setter;
 
 public class UserRequest {
 
+private Long id;
 
 @NotNull
 @NotBlank(message="Please provide your First name")
@@ -39,8 +41,8 @@ private String city;
 @Size(min = 10, max = 80)
 private String email;
 
-//@Column
-//private String image;
+@Column
+private Set<Long> image; 
 
 //@Pattern(regexp = "\\\\d{3}-\\\\d{3}-\\\\d{4}",	// 999-999-9999
 //message = "Please provide valid phone number" ) 
