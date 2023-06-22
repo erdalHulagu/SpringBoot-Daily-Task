@@ -29,7 +29,7 @@ public interface UserMapper {
 	
 
     @Mapping(target = "id", ignore = true )
-	@Mapping(target = "image", source = "image", qualifiedByName = "imageLong")
+	@Mapping(target = "image", source = "image", qualifiedByName = "getImageAsLong")
 	UserDTO userToUserDto(User user);
 	
 	
@@ -51,13 +51,23 @@ public interface UserMapper {
 	  
      // image turunde imageyi long turunde imageye cevirdik
 	  @Named("imageLong")
-	    static Set<Long> maper(Set<Image> imageSet) {
-	        return imageSet.stream()
-	                .map(Image->Image.getId())
-	                .collect(Collectors.toSet());
+	    static Set<Image> maper(Set<String> imageSet) {
+	       Set<Image> images = new HashSet<>();
+	       for(String imgSet : imageSet) {
+	    	   
+	    	   Image image =new Image();
+	    	   
+	    	   image.setId(imageSet);
+	       }
 	    }
 	
-	
+//	// image turunde imageyi long turunde imageye cevirdik
+//		  @Named("imageLong")
+//		    static Set<Long> maper(Set<Image> imageSet) {
+//		        return imageSet.stream()
+//		                .map(Image->Image.getId())
+//		                .collect(Collectors.toSet());
+//		    }
 	
 }
 	

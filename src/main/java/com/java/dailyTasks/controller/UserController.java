@@ -42,9 +42,9 @@ public class UserController {
 	@GetMapping("/{id}")
 	public ResponseEntity<UserDTO> getUser(@PathVariable Long id){
 		
-		UserDTO user=userService. getUserById(id);
+		UserDTO userDTO=userService. getUserById(id);
 		
-		return ResponseEntity.ok(user);
+		return ResponseEntity.ok(userDTO);
 	
 	}
 	
@@ -69,15 +69,15 @@ public class UserController {
 //	}
 	
 	//get all users
-	@GetMapping
+	@GetMapping("/admin")
 	public ResponseEntity<List<UserDTO>>getAllUser(){
    
 
 		
-		List<UserDTO> users = userService.getAll();
+		List<UserDTO> usersDTO = userService.getAllUsers();
 		
 
-		return ResponseEntity.ok(users);
+		return ResponseEntity.ok(usersDTO);
 		
 	}
 	// create user

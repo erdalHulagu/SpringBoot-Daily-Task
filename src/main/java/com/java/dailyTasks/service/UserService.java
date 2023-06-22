@@ -56,22 +56,26 @@ UserDTO userDTO =	userMaper.userToUserDto(user);
 	
 	
 // get all users
-	public List<UserDTO> getAll() {
-		List<User> userPage = userRepository.findAll();
-	List <UserDTO> userDTOList	=userMaper.userToUserDTOList(userPage);
+	public List<UserDTO> getAllUsers() {
+		List<User> userList = userRepository.findAll();
+		
+		if (userList.isEmpty()) {
+			new ResourceNotFoundException(String.format(ErrorMessage.USER_LIST_IS_EMPTY));
+		}
+	List <UserDTO> userDTOList	=userMaper.userToUserDTOList(userList);
 		return userDTOList;
 	}
 	
 	
 //save user
 	public void createUser(UserDTO userDTO, Long imageId) {
-User	user=userMaper.userDTOToUser(userDTO);
-	
+
+		User	user=userMaper.userDTOToUser(userDTO);
 	
 	Image imageFile =imageService.findImageById(imageId);
 		
 		Set<Image> image = new HashSet<>();
-		image.add(imageFile);
+     	image.add(imageFile);
 		
 		user.setImage(image);
 		
