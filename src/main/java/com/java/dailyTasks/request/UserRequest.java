@@ -42,7 +42,7 @@ private String city;
 private String email;
 
 @Column
-private Set<Long> image; 
+private Set<String> image; 
 
 //@Pattern(regexp = "\\\\d{3}-\\\\d{3}-\\\\d{4}",	// 999-999-9999
 //message = "Please provide valid phone number" ) 

@@ -5,12 +5,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
+import org.hibernate.annotations.GenericGenerator;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
@@ -24,8 +23,9 @@ import jakarta.validation.constraints.NotBlank;
 @Builder
 public class Image {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
+	@GeneratedValue(generator = "uuid") 
+	@GenericGenerator(name = "uuid", strategy = "uuid2")
+	private String id;
 
 	@Lob
 	 @Column(name = "imagedata",length = 1000)
@@ -43,7 +43,7 @@ public class Image {
 		this.data = data;
 	}
 
-	public Image(Long id) {
+	public Image(String id) {
 		this.id = id;
 	}
 

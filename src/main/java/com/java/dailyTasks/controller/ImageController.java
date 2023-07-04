@@ -39,7 +39,7 @@ public class ImageController {
 	}
 
 		@GetMapping("/image/{id}")
-		public ResponseEntity<byte[]> saveImage(@PathVariable Long id)throws IOException{
+		public ResponseEntity<byte[]> saveImage(@PathVariable String id)throws IOException{
 			byte[] imageData=imageService.getImage(id);
 			
 //			 HttpHeaders header = new HttpHeaders();
@@ -53,7 +53,7 @@ public class ImageController {
 		
 		@DeleteMapping("/{id}")
 //		@PreAuthorize("hasRole('ADMIN')")
-		public ResponseEntity<Response> deleteImageFile(@PathVariable Long id) {
+		public ResponseEntity<Response> deleteImageFile(@PathVariable String id) {
 			imageService.removeById(id);
 			
 			Response response = new Response(ResponseMessage.IMAGE_DELETE_RESPONSE_MESSAGE,true);

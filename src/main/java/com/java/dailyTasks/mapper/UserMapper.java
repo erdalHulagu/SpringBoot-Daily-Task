@@ -19,17 +19,17 @@ public interface UserMapper {
 	
 	
 	@Mapping(target = "id", ignore=true)
-	@Mapping(target = "image" , source = "image", qualifiedByName =  "getImageAsLong" )
+	@Mapping(target = "image" , ignore = true )
 	User userDTOToUser(UserDTO userDTO);
   
 	
 	@Mapping(target = "id", ignore=true)
-	@Mapping(target = "image" , source = "image", qualifiedByName =  "getImageAsLong" )
+	@Mapping(target = "image",source = "image",qualifiedByName = "getImageAsLong")
 	User userRequestToUser(UserRequest userRequest);
 	
 
     @Mapping(target = "id", ignore = true )
-	@Mapping(target = "image", source = "image", qualifiedByName = "getImageAsLong")
+	@Mapping(target = "image",source = "image",qualifiedByName = "getImageAsString")
 	UserDTO userToUserDto(User user);
 	
 	
@@ -37,37 +37,33 @@ public interface UserMapper {
 	  
 	 // long turunde image i image turunde image e cevidik
 	 @Named("getImageAsLong")
-    static Set<Image> map(Set<Long> imageUrls) {
-        Set<Image> images = new HashSet<>();
-        for (Long imageUrl : imageUrls) {
-            Image image = new Image();
-            image.setId(imageUrl);
-            images.add(image);
-        }
-        return images;
+   public static Set<Image> map(Set<String> imageUrls) {
+		 Set<Image> images = new HashSet<>();
+	        for (String imageUrl : imageUrls) {
+	            Image image = new Image();
+	            image.setId(imageUrl);
+	            // Eğer Image sınıfında başka alanlar varsa, diğer alanları da ayarlayabilirsiniz
+	            images.add(image);
+	        }
+	        return images;
 	 }
-
-
-	  
-     // image turunde imageyi long turunde imageye cevirdik
-	  @Named("imageLong")
-	    static Set<Image> maper(Set<String> imageSet) {
-	       Set<Image> images = new HashSet<>();
-	       for(String imgSet : imageSet) {
-	    	   
-	    	   Image image =new Image();
-	    	   
-	    	   image.setId(imageSet);
-	       }
-	    }
-	
-//	// image turunde imageyi long turunde imageye cevirdik
-//		  @Named("imageLong")
-//		    static Set<Long> maper(Set<Image> imageSet) {
-//		        return imageSet.stream()
-//		                .map(Image->Image.getId())
-//		                .collect(Collectors.toSet());
-//		    }
+	 @Named("getImageAsString")
+		public static  Set<String> getImageIds( Set<Image> imageFiles) {
+			Set<String> imgs = new HashSet<>();
+			imgs = imageFiles.stream().map(imFile->imFile.getId().
+																	toString()).
+																	collect(Collectors.toSet());
+			 return imgs;
+		}
+//
+//	 @Named("getImageAsStringForRequset")
+//	 public static  Set<Image> getImage( Set<String> imageFiles) {
+//			Set<Image> imgs = new HashSet<>();
+//			imgs = imageFiles.stream().map(imFile->imFile.getId().
+//																	toString()).
+//																	collect(Collectors.toSet());
+//			 return imgs;
+//		}
 	
 }
 	

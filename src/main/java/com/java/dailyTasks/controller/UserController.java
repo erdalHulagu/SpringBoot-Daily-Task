@@ -83,8 +83,8 @@ public class UserController {
 	// create user
 	@PostMapping("/admin/{imageId}")
 	
-	public ResponseEntity<Response> createUser(@Validated  @RequestBody  UserDTO userDTO, @PathVariable Long imageId) {
-		userService.createUser(userDTO, imageId);
+	public ResponseEntity<Response> createUser(@Validated  @RequestBody  UserRequest userRequest, @PathVariable String imageId) {
+		userService.createUser(userRequest, imageId);
 		Response response = new  Response();
 		response.setMessage(ResponseMessage.USER_CREATED);
 		response.setSuccess(true);
@@ -92,11 +92,11 @@ public class UserController {
 		
 		
 	}
-	@PutMapping("{id}")
+	@PutMapping("/{imageId}")
 	
-	public ResponseEntity<UserDTO> upDateUser(@Validated @PathVariable Long id, @RequestBody UserRequest userRequest){
+	public ResponseEntity<UserDTO> upDateUser(@Validated @PathVariable String imageId, @RequestBody UserRequest userRequest){
 		
-		 UserDTO updateduser = userService.updateUser(id,userRequest);
+		 UserDTO updateduser = userService.updateUser(imageId,userRequest);
 		 Response response = new Response();
 		 response.setMessage(ResponseMessage.USER_UPDATED_MESSAGE);
 		 return ResponseEntity.ok(updateduser);
@@ -115,7 +115,7 @@ public class UserController {
 		
 	
 	}
-	@GetMapping("{email}")
+	@GetMapping("/email/{email}")
 	public ResponseEntity<UserDTO> getUserByEmailEntity (@PathVariable User email){
 		
 	UserDTO  emaillUser = userService.getUserByEmail(email);

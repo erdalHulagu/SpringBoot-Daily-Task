@@ -13,10 +13,19 @@ public interface ImageRepository extends JpaRepository<Image,Long> {
 
 	
 	@EntityGraph(attributePaths = "id") 
-	Optional<Image> findImageById(Long id);
+	Optional<Image> findImageById(String id);
 
 
 	FileData save(FileData build);
+
+	@EntityGraph(attributePaths = "id") 
+	Optional<Image> findById(String id);
+
+//	@EntityGraph(attributePaths = "image")
+//	void delete(byte[] imageData);
+
+
+
 	
 }
 

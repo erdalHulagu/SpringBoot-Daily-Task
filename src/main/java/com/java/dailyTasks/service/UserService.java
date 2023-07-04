@@ -68,12 +68,15 @@ UserDTO userDTO =	userMaper.userToUserDto(user);
 	
 	
 //save user
-	public void createUser(UserDTO userDTO, Long imageId) {
+	public void createUser(UserRequest userRequest, String imageId) {
 
-		User	user=userMaper.userDTOToUser(userDTO);
-	
-	Image imageFile =imageService.findImageById(imageId);
-		
+	Image imageFile =getImage(imageId);
+//	Integer usedUserImageCount= userRepository.findCountingById(imageFile);
+//		
+//	if (usedUserImageCount > 0) {
+//		throw new ResourceNotFoundException(ErrorMessage.IMAGE_USED_MESSAGE);
+//	}
+	User	user=userMaper.userRequestToUser(userRequest);
 		Set<Image> image = new HashSet<>();
      	image.add(imageFile);
 		
@@ -83,20 +86,26 @@ UserDTO userDTO =	userMaper.userToUserDto(user);
 		
 	}
 	//update user
-	public UserDTO updateUser(Long id, UserRequest userRequest) {
+	public UserDTO updateUser(String imageId, UserRequest userRequest) {
 
-User user=	userRepository.findByEmail(userRequest.getEmail()).orElseThrow(()-> new ResourceNotFoundException(String.format(ErrorMessage.EMAIL_NOT_FOUND)));
-       
+User user=userMaper.userRequestToUser(userRequest);
+		
+
        if ((user==null)) {
     		new ResourceNotFoundException(String.format(ErrorMessage.EMAIL_IS_NOT_MATCH));
 	}
+       Image imageFile =getImage(imageId);
+   
+      
+        Set<Image> image = new HashSet<>();
+        image.add(imageFile);
+        user.setImage(image);
        
-        User user1 = userMaper.userRequestToUser(userRequest);
-	     User  user2 =userRepository.save(user1);
+	 userRepository.save(user);
 	         
-	   UserDTO userDTO2 =  userMaper.userToUserDto(user2);
+	   UserDTO userDTO =  userMaper.userToUserDto(user);
 	
-	   return userDTO2;
+	   return userDTO;
 	}
 //	private Optional<User> getUserByEmail(String email) {
 //		
@@ -117,7 +126,7 @@ User user=	userRepository.findByEmail(userRequest.getEmail()).orElseThrow(()-> n
 		
 	}
 
-
+// email ile userbulma
 	public UserDTO getUserByEmail(User emailUser) {
 		
 		String email =emailUser.getEmail();
@@ -131,7 +140,10 @@ User user=	userRepository.findByEmail(userRequest.getEmail()).orElseThrow(()-> n
 return userDTO;
 	}
 
-
+public Image getImage (String id) {
+	Image imageFile =imageService.findImageByImageId(id);
+	return imageFile;
+}
 	
 	}
 	

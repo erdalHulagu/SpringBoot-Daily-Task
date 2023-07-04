@@ -54,19 +54,19 @@ public class ImageService {
  
 //--------------------------------------------------------------------------------------------
 
-    public byte[] getImage(Long id) {
-        Optional<Image> dbImageData = Optional.of(imageRepository.findById(id).orElseThrow(()->new ResourceNotFoundException(String.format(ErrorMessage.RESOURCE_NOT_FOUND_MESSAGE,true))));
+    public byte[] getImage(String id) {
+        Optional<Image> dbImageData = Optional.of(imageRepository.findImageById(id).orElseThrow(()->new ResourceNotFoundException(String.format(ErrorMessage.RESOURCE_NOT_FOUND_MESSAGE,true))));
         byte[] images = ImageUtils.decompressImage(dbImageData.get().getData());
         return images;
     }
 //--------------------------------------------------------------------------------------------
-    public void removeById(Long id) {
-		Image imageData = findImageById(id);
+    public void removeById(String id) {
+		Image imageData = findImageByImageId(id);
 		imageRepository.delete(imageData);
 
 	}
 
-	public Image findImageById(Long id) {
+	public Image findImageByImageId(String id) {
 		return imageRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException(String.format(ErrorMessage.RESOURCE_NOT_FOUND_MESSAGE,true)));
 
 	}

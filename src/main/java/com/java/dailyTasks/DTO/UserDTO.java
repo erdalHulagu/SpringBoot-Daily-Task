@@ -53,7 +53,12 @@ private String email;
 private LocalDateTime createAt;
 
 
-private Set<Long> image;
+private Set<String> image;
 
 
+
+	
 }
+
+
+
