@@ -28,7 +28,7 @@ public interface UserMapper {
 	User userRequestToUser(UserRequest userRequest);
 	
 
-    @Mapping(target = "id", ignore = true )
+
 	@Mapping(target = "image",source = "image",qualifiedByName = "getImageAsString")
 	UserDTO userToUserDto(User user);
 	
@@ -41,8 +41,7 @@ public interface UserMapper {
 		 Set<Image> images = new HashSet<>();
 	        for (String imageUrl : imageUrls) {
 	            Image image = new Image();
-	            image.setId(imageUrl);
-	            // Eğer Image sınıfında başka alanlar varsa, diğer alanları da ayarlayabilirsiniz
+	            image.setId(imageUrl);   // Eğer Image sınıfında başka alanlar varsa, diğer alanları da ayarlayabilirsiniz
 	            images.add(image);
 	        }
 	        return images;

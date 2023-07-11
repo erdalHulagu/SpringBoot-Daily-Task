@@ -83,8 +83,8 @@ public class UserController {
 	// create user
 	@PostMapping("/admin/{imageId}")
 	
-	public ResponseEntity<Response> createUser(@Validated  @RequestBody  UserRequest userRequest, @PathVariable String imageId) {
-		userService.createUser(userRequest, imageId);
+	public ResponseEntity<Response> createUser(@Validated  @RequestBody  UserDTO userDto, @PathVariable String imageId) {
+		userService.createUser(userDto, imageId);
 		Response response = new  Response();
 		response.setMessage(ResponseMessage.USER_CREATED);
 		response.setSuccess(true);
@@ -115,8 +115,8 @@ public class UserController {
 		
 	
 	}
-	@GetMapping("/email/{email}")
-	public ResponseEntity<UserDTO> getUserByEmailEntity (@PathVariable User email){
+	@GetMapping("/email")
+	public ResponseEntity<UserDTO> getUserByEmailEntity (@RequestBody User email){
 		
 	UserDTO  emaillUser = userService.getUserByEmail(email);
 	

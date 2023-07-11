@@ -68,7 +68,7 @@ UserDTO userDTO =	userMaper.userToUserDto(user);
 	
 	
 //save user
-	public void createUser(UserRequest userRequest, String imageId) {
+	public void createUser(UserDTO userDto, String imageId) {
 
 	Image imageFile =getImage(imageId);
 //	Integer usedUserImageCount= userRepository.findCountingById(imageFile);
@@ -76,7 +76,7 @@ UserDTO userDTO =	userMaper.userToUserDto(user);
 //	if (usedUserImageCount > 0) {
 //		throw new ResourceNotFoundException(ErrorMessage.IMAGE_USED_MESSAGE);
 //	}
-	User	user=userMaper.userRequestToUser(userRequest);
+	User	user=userMaper.userDTOToUser(userDto);
 		Set<Image> image = new HashSet<>();
      	image.add(imageFile);
 		

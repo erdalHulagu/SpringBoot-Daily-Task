@@ -1,5 +1,6 @@
 package com.java.dailyTasks.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -16,6 +17,13 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
 	@EntityGraph(attributePaths = "image")
 	Optional<User>  findById(Long id);
+
+	@EntityGraph(attributePaths = { "image"})
+	List<User> findAll();
+
+	
+	
+	
 
 //	@Query( "SELECT count(*) from User u join u.image img where img.id=:id")
 //	Integer findCountingById(@Param("id") Image imageFile );

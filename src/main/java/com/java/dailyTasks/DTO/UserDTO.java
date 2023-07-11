@@ -20,7 +20,7 @@ import lombok.Setter;
 
 public class UserDTO {
 
-private Long id;
+//private Long id;
 
 @NotNull
 @NotBlank(message = "Type first name please")
