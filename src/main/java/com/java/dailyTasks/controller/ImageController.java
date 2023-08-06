@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.java.dailyTasks.domain.Image;
 import com.java.dailyTasks.response.ImageSavedResponse;
 import com.java.dailyTasks.response.Response;
 import com.java.dailyTasks.response.ResponseMessage;
