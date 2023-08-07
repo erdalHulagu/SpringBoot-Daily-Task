@@ -2,8 +2,6 @@ package com.java.dailyTasks.DTO;
 
 import java.time.LocalDateTime;
 import java.util.Set;
-import com.java.dailyTasks.domain.Image;
-import jakarta.persistence.Entity;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

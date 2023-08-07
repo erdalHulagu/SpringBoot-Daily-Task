@@ -13,6 +13,7 @@ import com.java.dailyTasks.domain.User;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
+	@EntityGraph(attributePaths = "roles")
 	Optional<User> findByEmail(String email);
 
 	@EntityGraph(attributePaths = "image")
@@ -20,6 +21,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
 	@EntityGraph(attributePaths = { "image"})
 	List<User> findAll();
+
+	Boolean existsByEmail(String email);
 
 	
 	

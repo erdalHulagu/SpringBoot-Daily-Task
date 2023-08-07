@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.service.annotation.DeleteExchange;
 
 import com.java.dailyTasks.DTO.UserDTO;
 import com.java.dailyTasks.domain.Image;
@@ -30,7 +29,6 @@ import com.java.dailyTasks.response.Response;
 import com.java.dailyTasks.response.ResponseMessage;
 import com.java.dailyTasks.service.UserService;
 
-import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/users")
@@ -115,17 +113,17 @@ public class UserController {
 		
 	
 	}
-	@GetMapping("/email")
-	public ResponseEntity<UserDTO> getUserByEmailEntity (@RequestBody User email){
-		
-	UserDTO  emaillUser = userService.getUserByEmail(email);
-	
-	return ResponseEntity.ok(emaillUser);
-	
-		
-		
-		
-		}
+//	@GetMapping("/email")
+//	public ResponseEntity<UserDTO> getUserByEmailEntity (@RequestBody String email){
+//		
+//	UserDTO  emaillUser = userService.getUserByEmail(email);
+//	
+//	return ResponseEntity.ok(emaillUser);
+//	
+//		
+//		
+//		
+//		}
 	
 	
 }

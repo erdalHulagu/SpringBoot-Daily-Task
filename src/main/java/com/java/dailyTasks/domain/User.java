@@ -1,20 +1,26 @@
 package com.java.dailyTasks.domain;
 
-
-import java.time.LocalDateTime;
-import java.util.Set;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+
+import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
+import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -43,30 +49,34 @@ private String firstName;
 @Column(name="soyisim",nullable = false, length = 100)
 private String lastName;
 
-@NotNull
-@Column(name="ulke",nullable = false, length = 50)
-private String state;
-
-@NotNull
-@Column(name="sehir",nullable = false, length = 50)
-private String city;
 
 @Email(message = "Please provide valid email")
 @Size(min = 10, max = 80)
 @Column(length = 80, nullable = false, unique=true)
 private String email;
-//
-//@Column
-//private Long image;
+
+@Email(message = "Please provide valid email")
+@Size(min = 10, max = 80)
+@Column(length = 80, nullable = false, unique=true)
+private String password;
+
+@Size(max= 100)
+@NotBlank(message = "Please provide your address")
+@Column(length = 80, nullable = false, unique=true)
+private String address;
 
 //@Pattern(regexp = "\\\\d{3}-\\\\d{3}-\\\\d{4}",	// 999-999-9999
 //message = "Please provide valid phone number" ) 
 //@Column(nullable = false)
 //private String phone;
 
+@UpdateTimestamp
+@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+private LocalDateTime updateAt;
 
 
 @Column(name = "create_at", updatable = false, nullable = true)
+@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
 private LocalDateTime createAt;
 
 
@@ -75,4 +85,12 @@ private LocalDateTime createAt;
 private Set<Image> image;
 
 
+@ManyToMany   // hibernate defaultta LAZY
+@JoinTable( name="t_user_role",
+						 joinColumns = @JoinColumn(name="user_id"),
+						 inverseJoinColumns = @JoinColumn(name="role_id"))
+private  Set<Role> roles = new HashSet<>();
+
+
 }
+

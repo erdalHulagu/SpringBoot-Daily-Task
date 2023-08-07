@@ -7,17 +7,20 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.java.dailyTasks.DTO.UserDTO;
 import com.java.dailyTasks.domain.Image;
+import com.java.dailyTasks.domain.Role;
 import com.java.dailyTasks.domain.User;
+import com.java.dailyTasks.domain.enums.RoleType;
+import com.java.dailyTasks.exceptions.ConflictException;
 import com.java.dailyTasks.exceptions.ErrorMessage;
 import com.java.dailyTasks.exceptions.ResourceNotFoundException;
 import com.java.dailyTasks.mapper.UserMapper;
 import com.java.dailyTasks.repository.UserRepository;
+import com.java.dailyTasks.request.RegisterRequest;
 import com.java.dailyTasks.request.UserRequest;
 
 
@@ -32,6 +35,12 @@ public class UserService {
 	
 	@Autowired
 	private UserMapper userMaper;
+	
+	@Autowired
+	private RoleService roleService;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 	
 	
 
@@ -117,8 +126,38 @@ User user=userMaper.userRequestToUser(userRequest);
 //		
 //	}
 
-
-
+	//---------------- register user----------------------
+	public void saveUser(RegisterRequest registerRequest) {
+		if(userRepository.existsByEmail(registerRequest.getEmail())) {
+			throw new ConflictException(String.format(ErrorMessage.EMAIL_ALREADY_EXIST_MESSAGE,registerRequest.getEmail()));
+		}
+		
+	Image img= getImage( registerRequest.getImageId());
+	Set<Image> image=new HashSet<>();
+	image.add(img);		
+		Role role = roleService.findByType(RoleType.ROLE_USER);
+		
+		Set<Role> roles = new HashSet<>();
+		roles.add(role);
+		
+		String encodedPassword =  passwordEncoder.encode(registerRequest.getPassword());
+		
+		User user = new User();
+		user.setImage(image);
+		user.setFirstName(registerRequest.getFirstName());
+		user.setLastName(registerRequest.getLastName());
+		user.setEmail(registerRequest.getEmail());
+		user.setPassword(encodedPassword);
+		user.setCreateAt(LocalDateTime.now());
+		user.setUpdateAt(registerRequest.getUpdateAt());
+		user.setAddress(registerRequest.getAddress());
+		user.setRoles(roles);
+		
+		userRepository.save(user);
+		
+	}
+		
+	
 
 	public void deleteUserWithId(Long id) {
 		
@@ -126,20 +165,21 @@ User user=userMaper.userRequestToUser(userRequest);
 		
 	}
 
-// email ile userbulma
-	public UserDTO getUserByEmail(User emailUser) {
+//------------- find user by email-------------------
+	public Optional<User> getUserByEmail(String email) {
 		
-		String email =emailUser.getEmail();
+        Optional<User> user =	userRepository.findByEmail(email);
 		
-        User	user =	(userRepository.findByEmail
-		                            (email).orElseThrow(
-		                                  ()-> new ResourceNotFoundException(String.format(ErrorMessage.EMAIL_NOT_FOUND))));
+	if (user.isEmpty()) {
+	  throw	new ResourceNotFoundException(String.format(ErrorMessage.RESOURCE_NOT_FOUND_MESSAGE,email));
 		
-	UserDTO userDTO =	userMaper.userToUserDto(user);
-
-return userDTO;
 	}
 
+return user;
+	}
+
+	
+	//------------ get image by string id ------------------
 public Image getImage (String id) {
 	Image imageFile =imageService.findImageByImageId(id);
 	return imageFile;

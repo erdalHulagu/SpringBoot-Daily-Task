@@ -10,5 +10,6 @@ public class ResponseMessage {
 	public static final String USER_UPDATED_MESSAGE = "User has been succesfully updated";
 	public static final String USER_DELETED = "User has been succesfully deleted";
 	public static final String USER_CREATED ="User created succesfully";
+	public static final String REGISTER_RESPONSE_MESSAGE = "User has been registeed";
 
 }
