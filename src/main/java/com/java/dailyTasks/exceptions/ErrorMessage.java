@@ -23,6 +23,8 @@ public class ErrorMessage {
 	public static final String EMAIL_NOT_FOUND = "Email not found";
 
 	public static final String USER_LIST_IS_EMPTY = "No user found";
+
+	public static final String PRINCIPAL_FOUND_MESSAGE = "Principal not found";
 	
 	
 	

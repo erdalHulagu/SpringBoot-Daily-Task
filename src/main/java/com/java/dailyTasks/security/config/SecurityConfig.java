@@ -2,6 +2,7 @@ package com.java.dailyTasks.security.config;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.info.ProjectInfoProperties.Build;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -48,15 +49,17 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http.csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(auth->{
-                    auth.requestMatchers("/login","/register").permitAll()
+        http.csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests
+                (auth->{ auth.requestMatchers("/","login","/register","/js","/css").permitAll()
                             .requestMatchers("/users/**").authenticated();
                 })
-                .sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))  //---------  STATELESS demek iki taraf birbiini tanimasin
                 .authenticationProvider(authenticationProvider())
-                .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class)
-                .build();
+                .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class);
+//                .build();   buraya bunu koyup return u bu filtrenin basina koyarakta calistirabilirdik
+        
+        return http.build();
     }
 
     

@@ -5,8 +5,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -34,7 +37,7 @@ public class UserService {
 	private ImageService imageService;
 	
 	@Autowired
-	private UserMapper userMaper;
+	private UserMapper userMapper;
 	
 	@Autowired
 	private RoleService roleService;
@@ -43,12 +46,72 @@ public class UserService {
 	private PasswordEncoder passwordEncoder;
 	
 	
+	
+	
+	
+	
+	
+	
+	//------------------  get current user login------------------------
+	public Optional<String> getCurrentUserLogin(){
+		
+	SecurityContext securityContext= SecurityContextHolder.getContext();
+Authentication authentication=	securityContext.getAuthentication();
 
+    return Optional.ofNullable(extractPricipal(authentication));
+		
+	}
+	//------------------  get principal ------------------------
+	private static String extractPricipal(Authentication authentication) {
+		
+		if (authentication==null) {
+			
+			return null;
+			
+		}else if (authentication.getPrincipal() instanceof UserDetails ) {
+			
+			UserDetails secureUser=(UserDetails) authentication.getPrincipal();
+			return secureUser.getUsername();
+			
+		}else if (authentication.getPrincipal() instanceof String) {
+			
+			return (String) authentication.getPrincipal();
+			
+		}
+		return null;
+		
+		
+		
+	}
+	
+	//------------------  get current user ------------------------
+   public Optional<User> getCurrentUser() {
+		
+		String email = getCurrentUserLogin().orElseThrow(()->
+		 new ResourceNotFoundException(ErrorMessage.PRINCIPAL_FOUND_MESSAGE));
+		Optional<User> user =  getUserByEmail(email);
+		
+		return user ;
+		
+	}
+ //------------------  get current userDTO ------------------------
+   public UserDTO getPrincipal() {
+	 User currentUser =  getCurrentUser().orElseThrow(()-> new ResourceNotFoundException(ErrorMessage.RESOURCE_NOT_FOUND_MESSAGE));
+	  // return userMapper.userToUserDTO(currentUser);
+	  UserDTO userDTO = userMapper.userToUserDto(currentUser);
+	  return userDTO;
+
+	
+}
+	
+	
+	
+// -------------------  get user by id --------------
 	public UserDTO getUserById(Long id) {
 		
 	User user =	userRepository.findById(id).orElseThrow(()-> new  ResourceNotFoundException(String.format(ErrorMessage.USER_NOT_FOUND_MESSAGE,id)));
 		
-UserDTO userDTO =	userMaper.userToUserDto(user);
+UserDTO userDTO =	userMapper.userToUserDto(user);
 		return userDTO;
 		
 		
@@ -71,7 +134,7 @@ UserDTO userDTO =	userMaper.userToUserDto(user);
 		if (userList.isEmpty()) {
 			new ResourceNotFoundException(String.format(ErrorMessage.USER_LIST_IS_EMPTY));
 		}
-	List <UserDTO> userDTOList	=userMaper.userToUserDTOList(userList);
+	List <UserDTO> userDTOList	=userMapper.userToUserDTOList(userList);
 		return userDTOList;
 	}
 	
@@ -85,7 +148,7 @@ UserDTO userDTO =	userMaper.userToUserDto(user);
 //	if (usedUserImageCount > 0) {
 //		throw new ResourceNotFoundException(ErrorMessage.IMAGE_USED_MESSAGE);
 //	}
-	User	user=userMaper.userDTOToUser(userDto);
+	User	user=userMapper.userDTOToUser(userDto);
 		Set<Image> image = new HashSet<>();
      	image.add(imageFile);
 		
@@ -97,7 +160,7 @@ UserDTO userDTO =	userMaper.userToUserDto(user);
 	//update user
 	public UserDTO updateUser(String imageId, UserRequest userRequest) {
 
-User user=userMaper.userRequestToUser(userRequest);
+User user=userMapper.userRequestToUser(userRequest);
 		
 
        if ((user==null)) {
@@ -112,7 +175,7 @@ User user=userMaper.userRequestToUser(userRequest);
        
 	 userRepository.save(user);
 	         
-	   UserDTO userDTO =  userMaper.userToUserDto(user);
+	   UserDTO userDTO =  userMapper.userToUserDto(user);
 	
 	   return userDTO;
 	}
@@ -169,13 +232,10 @@ User user=userMaper.userRequestToUser(userRequest);
 	public Optional<User> getUserByEmail(String email) {
 		
         Optional<User> user =	userRepository.findByEmail(email);
-		
-	if (user.isEmpty()) {
-	  throw	new ResourceNotFoundException(String.format(ErrorMessage.RESOURCE_NOT_FOUND_MESSAGE,email));
-		
-	}
-
-return user;
+		if (user.isEmpty()) {
+		throw	new ResourceNotFoundException(String.format(ErrorMessage.RESOURCE_NOT_FOUND_MESSAGE,email));
+		}
+          return user;
 	}
 
 	
