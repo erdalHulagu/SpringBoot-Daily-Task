@@ -51,7 +51,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests
-                (auth->{ auth.requestMatchers("/","login","/register","/js","/css").permitAll()
+                (auth->{ auth.requestMatchers("/","login","/register","/js","/css","images/*").permitAll()
                             .requestMatchers("/users/**").authenticated();
                 })
                 .sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))  //---------  STATELESS demek iki taraf birbiini tanimasin

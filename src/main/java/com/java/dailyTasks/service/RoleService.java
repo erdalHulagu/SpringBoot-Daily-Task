@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 
 import com.java.dailyTasks.domain.Role;
 import com.java.dailyTasks.domain.enums.RoleType;
-import com.java.dailyTasks.exceptions.ErrorMessage;
+import com.java.dailyTasks.exception.message.ErrorMessage;
 import com.java.dailyTasks.exceptions.ResourceNotFoundException;
 import com.java.dailyTasks.repository.RoleRepository;
 

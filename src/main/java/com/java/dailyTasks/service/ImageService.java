@@ -7,7 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.java.dailyTasks.domain.FileData;
 import com.java.dailyTasks.domain.Image;
-import com.java.dailyTasks.exceptions.ErrorMessage;
+import com.java.dailyTasks.exception.message.ErrorMessage;
 import com.java.dailyTasks.exceptions.ResourceNotFoundException;
 import com.java.dailyTasks.repository.FileDataRepository;
 import com.java.dailyTasks.repository.ImageRepository;

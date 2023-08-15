@@ -81,8 +81,8 @@ public class UserController {
 	// create user
 	@PostMapping("/admin/{imageId}")
 	
-	public ResponseEntity<Response> createUser(@Validated  @RequestBody  UserDTO userDto, @PathVariable String imageId) {
-		userService.createUser(userDto, imageId);
+	public ResponseEntity<Response> createUser(@Validated  @RequestBody  UserRequest userRequest, @PathVariable String imageId) {
+		userService.createUser(userRequest, imageId);
 		Response response = new  Response();
 		response.setMessage(ResponseMessage.USER_CREATED);
 		response.setSuccess(true);

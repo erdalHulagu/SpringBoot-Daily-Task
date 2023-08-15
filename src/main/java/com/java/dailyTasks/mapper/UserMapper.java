@@ -8,14 +8,16 @@ import java.util.stream.Collectors;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
+import org.springframework.stereotype.Component;
 
 import com.java.dailyTasks.DTO.UserDTO;
 import com.java.dailyTasks.domain.Image;
 import com.java.dailyTasks.domain.User;
 import com.java.dailyTasks.request.UserRequest;
 
+@Component
 @Mapper(componentModel = "spring")
-public interface UserMapper {
+public interface UserMapper  {
 	
 	
 	@Mapping(target = "id", ignore=true)

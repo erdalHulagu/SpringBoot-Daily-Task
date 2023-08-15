@@ -18,8 +18,8 @@ import com.java.dailyTasks.domain.Image;
 import com.java.dailyTasks.domain.Role;
 import com.java.dailyTasks.domain.User;
 import com.java.dailyTasks.domain.enums.RoleType;
+import com.java.dailyTasks.exception.message.ErrorMessage;
 import com.java.dailyTasks.exceptions.ConflictException;
-import com.java.dailyTasks.exceptions.ErrorMessage;
 import com.java.dailyTasks.exceptions.ResourceNotFoundException;
 import com.java.dailyTasks.mapper.UserMapper;
 import com.java.dailyTasks.repository.UserRepository;
@@ -30,22 +30,31 @@ import com.java.dailyTasks.request.UserRequest;
 @Service
 public class UserService {
 	
-	@Autowired
 	private UserRepository userRepository;
 	
-	@Autowired
 	private ImageService imageService;
 	
-	@Autowired
 	private UserMapper userMapper;
 	
-	@Autowired
 	private RoleService roleService;
-	
-	@Autowired
+		
 	private PasswordEncoder passwordEncoder;
 	
-	
+	@Autowired
+	public UserService(UserRepository userRepository
+			           ,ImageService imageService
+			           ,UserMapper userMapper
+			           ,RoleService roleService
+			           ,PasswordEncoder passwordEncoder) {
+		
+		this.userRepository=userRepository;
+		this.imageService=imageService;
+		this.userMapper=userMapper;
+		this.roleService=roleService;
+		this.passwordEncoder=passwordEncoder;
+		
+		
+	}
 	
 	
 	
@@ -85,18 +94,18 @@ Authentication authentication=	securityContext.getAuthentication();
 	}
 	
 	//------------------  get current user ------------------------
-   public Optional<User> getCurrentUser() {
+   public User getCurrentUser() {
 		
 		String email = getCurrentUserLogin().orElseThrow(()->
 		 new ResourceNotFoundException(ErrorMessage.PRINCIPAL_FOUND_MESSAGE));
-		Optional<User> user =  getUserByEmail(email);
+		User user =  getUserByEmail(email);
 		
 		return user ;
 		
 	}
  //------------------  get current userDTO ------------------------
    public UserDTO getPrincipal() {
-	 User currentUser =  getCurrentUser().orElseThrow(()-> new ResourceNotFoundException(ErrorMessage.RESOURCE_NOT_FOUND_MESSAGE));
+	 User currentUser =  getCurrentUser();
 	  // return userMapper.userToUserDTO(currentUser);
 	  UserDTO userDTO = userMapper.userToUserDto(currentUser);
 	  return userDTO;
@@ -140,15 +149,22 @@ UserDTO userDTO =	userMapper.userToUserDto(user);
 	
 	
 //save user
-	public void createUser(UserDTO userDto, String imageId) {
+	public void createUser(UserRequest userRequest, String imageId) {
 
+
+UserDTO userDTO	=getUserById(userRequest.getId());
+	
+	User	user=userMapper.userDTOToUser(userDTO);
+	
+	
 	Image imageFile =getImage(imageId);
+	
 //	Integer usedUserImageCount= userRepository.findCountingById(imageFile);
 //		
 //	if (usedUserImageCount > 0) {
 //		throw new ResourceNotFoundException(ErrorMessage.IMAGE_USED_MESSAGE);
 //	}
-	User	user=userMapper.userDTOToUser(userDto);
+	
 		Set<Image> image = new HashSet<>();
      	image.add(imageFile);
 		
@@ -229,13 +245,13 @@ User user=userMapper.userRequestToUser(userRequest);
 	}
 
 //------------- find user by email-------------------
-	public Optional<User> getUserByEmail(String email) {
+
+	public User getUserByEmail(String email ) {
 		
-        Optional<User> user =	userRepository.findByEmail(email);
-		if (user.isEmpty()) {
-		throw	new ResourceNotFoundException(String.format(ErrorMessage.RESOURCE_NOT_FOUND_MESSAGE,email));
-		}
-          return user;
+		  User user  =  userRepository.findByEmail(email).orElseThrow(()->
+		  			new ResourceNotFoundException(String.format(ErrorMessage.USER_NOT_FOUND_MESSAGE, email))
+				);
+		return user ;
 	}
 
 	

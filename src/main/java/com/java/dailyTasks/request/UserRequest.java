@@ -25,7 +25,7 @@ import lombok.Setter;
 
 public class UserRequest {
 
-//private Long id;
+private Long id;
 
 @NotNull
 @NotBlank(message="Please provide your First name")
@@ -47,6 +47,11 @@ private String email;
 
 @Column
 private Set<String> image; 
+
+public String getImageId() {
+	
+	return null;
+}
 
 //@Pattern(regexp = "\\\\d{3}-\\\\d{3}-\\\\d{4}",	// 999-999-9999
 //message = "Please provide valid phone number" ) 
