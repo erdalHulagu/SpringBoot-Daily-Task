@@ -16,7 +16,7 @@ import com.java.dailyTasks.domain.Role;
 import com.java.dailyTasks.domain.User;
 import com.java.dailyTasks.request.UserRequest;
 
-@Component
+
 @Mapper(componentModel = "spring")
 public interface UserMapper  {
 	

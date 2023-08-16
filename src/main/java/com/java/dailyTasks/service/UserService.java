@@ -214,7 +214,7 @@ User user=userMapper.userRequestToUser(userRequest);
 	Image img= getImage( registerRequest.getImageId());
 	Set<Image> image=new HashSet<>();
 	image.add(img);		
-		Role role = roleService.findByType(RoleType.ROLE_USER);
+		Role role = roleService.findByType(RoleType.ROLE_ANONYMOUS);
 		
 		Set<Role> roles = new HashSet<>();
 		roles.add(role);
