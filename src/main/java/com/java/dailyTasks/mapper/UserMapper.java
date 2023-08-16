@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import com.java.dailyTasks.DTO.UserDTO;
 import com.java.dailyTasks.domain.Image;
+import com.java.dailyTasks.domain.Role;
 import com.java.dailyTasks.domain.User;
 import com.java.dailyTasks.request.UserRequest;
 
@@ -22,20 +23,37 @@ public interface UserMapper  {
 	
 	@Mapping(target = "id", ignore=true)
 	@Mapping(target = "image" , ignore = true )
+	@Mapping(target = "roles",ignore = true)
 	User userDTOToUser(UserDTO userDTO);
   
 	
 	@Mapping(target = "id", ignore=true)
 	@Mapping(target = "image",source = "image",qualifiedByName = "getImageAsLong")
+	@Mapping(target = "roles",ignore = true)
 	User userRequestToUser(UserRequest userRequest);
 	
 
 
 	@Mapping(target = "image",source = "image",qualifiedByName = "getImageAsString")
+	@Mapping(target = "roles",source = "roles",qualifiedByName = "getRoleAsString")
 	UserDTO userToUserDto(User user);
 	
 	
 	List<UserDTO> userToUserDTOList(List<User> userList);
+	
+	@Named("getRoleAsString")
+	public static Set<String> mapRoles(Set<Role> roles) {
+		
+		Set<String> roleStr = new HashSet<>();
+		
+       roles.forEach( r-> {
+			roleStr.add(r.getType().getName()); // Administrator veya Customer gözükecek
+			
+		}); 
+		
+		return roleStr;
+	}
+	
 	  
 	 // long turunde image i image turunde image e cevidik
 	 @Named("getImageAsLong")

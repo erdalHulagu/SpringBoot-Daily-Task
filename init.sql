@@ -1,6 +1,6 @@
 INSERT INTO public.t_role(
 	type)
-	VALUES ('ROLE_CUSTOMER');
+	VALUES ('ROLE_USER');
 	
 INSERT INTO public.t_role(
 	type)

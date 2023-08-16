@@ -35,15 +35,32 @@ private String firstName;
 @NotBlank(message="Please provide your Last name")
 private String lastName;
 
-@NotNull
-private String state;
-
-@NotNull
-private String city;
-
 @Email(message = "Please provide valid email")
 @Size(min = 10, max = 80)
 private String email;
+
+@NotNull
+@NotBlank(message="Please provide your password")
+private String password;
+
+@NotNull
+@NotBlank(message="Please provide updateTime")
+private  LocalDateTime updateAt;
+
+//@Pattern(regexp = "\\\\d{3}-\\\\d{3}-\\\\d{4}",	// 999-999-9999
+//message = "Please provide valid phone number" ) 
+//@Column(nullable = false)
+//private String phone;
+
+
+@NotNull
+@NotBlank(message="Please provide createTime")
+private LocalDateTime createAt;
+
+@NotNull
+@NotBlank(message="Please provide your address")
+private String address;
+
 
 @Column
 private Set<String> image; 
@@ -59,8 +76,7 @@ public String getImageId() {
 //private String phone;
 
 
-//@NotBlank(message="Please provide time")
-private LocalDateTime createAt;
+
 
 
 
