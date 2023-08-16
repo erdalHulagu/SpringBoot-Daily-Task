@@ -25,7 +25,7 @@ public class ImageController {
 		this.imageService = imageService;
 	}
 
-	@PostMapping
+	@PostMapping("/upload")
 	public ResponseEntity<ImageSavedResponse> uploadImage(@RequestParam("imageFile")MultipartFile file) throws IOException { 
 
 		String imageId = imageService.uploadImage(file);

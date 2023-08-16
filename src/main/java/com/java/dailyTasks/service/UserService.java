@@ -227,8 +227,8 @@ User user=userMapper.userRequestToUser(userRequest);
 		user.setLastName(registerRequest.getLastName());
 		user.setEmail(registerRequest.getEmail());
 		user.setPassword(encodedPassword);
-		user.setCreateAt(LocalDateTime.now());
-		user.setUpdateAt(registerRequest.getUpdateAt());
+//		user.setCreateAt(LocalDateTime.now());
+//		user.setUpdateAt(registerRequest.getUpdateAt());
 		user.setAddress(registerRequest.getAddress());
 		user.setRoles(roles);
 		

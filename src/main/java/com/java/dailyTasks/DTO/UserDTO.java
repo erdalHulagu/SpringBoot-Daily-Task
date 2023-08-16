@@ -26,11 +26,11 @@ private String email;
 
 private String password;
 
-private  LocalDateTime updateAt;
-
-//private String phone;
-
-private LocalDateTime createAt;
+//private  LocalDateTime updateAt;
+//
+////private String phone;
+//
+//private LocalDateTime createAt;
 
 private String address;
 

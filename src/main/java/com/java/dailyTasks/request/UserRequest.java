@@ -7,6 +7,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -43,26 +45,27 @@ private String email;
 @NotBlank(message="Please provide your password")
 private String password;
 
-@NotNull
-@NotBlank(message="Please provide updateTime")
-private  LocalDateTime updateAt;
-
-//@Pattern(regexp = "\\\\d{3}-\\\\d{3}-\\\\d{4}",	// 999-999-9999
-//message = "Please provide valid phone number" ) 
-//@Column(nullable = false)
-//private String phone;
-
-
-@NotNull
-@NotBlank(message="Please provide createTime")
-private LocalDateTime createAt;
+//@NotNull
+//@NotBlank(message="Please provide updateTime")
+//private  LocalDateTime updateAt;
+//
+////@Pattern(regexp = "\\\\d{3}-\\\\d{3}-\\\\d{4}",	// 999-999-9999
+////message = "Please provide valid phone number" ) 
+////@Column(nullable = false)
+////private String phone;
+//
+//
+//@NotNull
+//@NotBlank(message="Please provide createTime")
+//private LocalDateTime createAt;
 
 @NotNull
 @NotBlank(message="Please provide your address")
 private String address;
 
 
-@Column
+@JoinColumn
+@OneToOne
 private Set<String> image; 
 
 public String getImageId() {

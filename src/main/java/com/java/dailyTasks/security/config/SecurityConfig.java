@@ -51,7 +51,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests
-                (auth->{ auth.requestMatchers("/","login","/register","/js","/css","images/*").permitAll()
+                (auth->{ auth.requestMatchers("/","login","/register","/js","/css","images/**").permitAll()
                             .requestMatchers("/users/**").authenticated();
                 })
                 .sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))  //---------  STATELESS demek iki taraf birbiini tanimasin
@@ -62,7 +62,7 @@ public class SecurityConfig {
         return http.build();
     }
 
-    
+
     @Bean
    	public WebMvcConfigurer corsConfigurer() {
    		return new WebMvcConfigurer() {
@@ -77,16 +77,16 @@ public class SecurityConfig {
     
  //*******************SWAGGER***********************
     
-//    private static final String [] AUTH_WHITE_LIST= {
-//			"/v3/api-docs/**", // swagger
-//			"swagger-ui.html", //swagger
-//			"/swagger-ui/**", // swagger
-//			"/",
-//			"index.html",
-//			"/images/**",
-//			"/css/**",
-//			"/js/**"
-//	};
+    private static final String [] AUTH_WHITE_LIST= {
+			"/v3/api-docs/**", // swagger
+			"swagger-ui.html", //swagger
+			"/swagger-ui/**", // swagger
+			"/",
+			"index.html",
+			"/images/**",
+			"/css/**",
+			"/js/**"
+	};
 
     @Bean
     public PasswordEncoder passwordEncoder() {

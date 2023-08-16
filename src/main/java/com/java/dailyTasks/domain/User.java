@@ -70,14 +70,14 @@ private String address;
 //@Column(nullable = false)
 //private String phone;
 
-@UpdateTimestamp
-@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-private LocalDateTime updateAt;
+//@UpdateTimestamp
+//@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+//private LocalDateTime updateAt;
 
 
-@Column(name = "create_at", updatable = false, nullable = true)
-@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-private LocalDateTime createAt;
+//@Column(name = "create_at", updatable = false, nullable = true)
+//@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+//private LocalDateTime createAt;
 
 
 @OneToMany(orphanRemoval = true)

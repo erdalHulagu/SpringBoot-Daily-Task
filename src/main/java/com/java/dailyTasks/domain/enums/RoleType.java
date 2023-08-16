@@ -2,8 +2,9 @@ package com.java.dailyTasks.domain.enums;
 
 public enum RoleType {
 	
-	ROLE_ANONYMOUS("Anonymous"),
-	ROLE_ADMIN("Administrator");
+	
+	ROLE_ADMIN("Administrator"),
+	ROLE_ANONYMOUS("Anonymous");
 	
 	private String name;
 	
