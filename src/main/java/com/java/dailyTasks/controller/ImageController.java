@@ -13,6 +13,8 @@ import com.java.dailyTasks.response.Response;
 import com.java.dailyTasks.response.ResponseMessage;
 import com.java.dailyTasks.service.ImageService;
 
+import jakarta.transaction.Transactional;
+
 import java.io.IOException;
 @RestController
 @RequestMapping("/images")
@@ -25,6 +27,7 @@ public class ImageController {
 		this.imageService = imageService;
 	}
 
+	@Transactional
 	@PostMapping("/upload")
 	public ResponseEntity<ImageSavedResponse> uploadImage(@RequestParam("imageFile")MultipartFile file) throws IOException { 
 
@@ -37,8 +40,9 @@ public class ImageController {
 
 	}
 
+	@Transactional
 		@GetMapping("/image/{id}")
-		public ResponseEntity<byte[]> saveImage(@PathVariable String id)throws IOException{
+		public ResponseEntity<byte[]> getImage(@PathVariable String id)throws IOException{
 			byte[] imageData=imageService.getImage(id);
 			
 //			 HttpHeaders header = new HttpHeaders();
@@ -49,7 +53,7 @@ public class ImageController {
 			return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(imageData);
 
 		}
-		
+		@Transactional
 		@DeleteMapping("/{id}")
 //		@PreAuthorize("hasRole('ADMIN')")
 		public ResponseEntity<Response> deleteImageFile(@PathVariable String id) {
@@ -62,6 +66,7 @@ public class ImageController {
 		
 
 
+		@Transactional
 		@PostMapping("/file")
 		public ResponseEntity<String> uploadImageToFIleSystem(@RequestParam("image")MultipartFile file) throws IOException {
 			String uploadImage = imageService.uploadImageToFileSystem(file);
@@ -69,6 +74,7 @@ public class ImageController {
 			return ResponseEntity.ok().body(uploadImage);
 		}
 
+		@Transactional
 		@GetMapping("/{id}")
 		public ResponseEntity<byte[]> downloadImageFromFileSystem(@PathVariable Long id) throws IOException {
 			byte[] imageData=imageService.downloadImageFromFileSystem(id);

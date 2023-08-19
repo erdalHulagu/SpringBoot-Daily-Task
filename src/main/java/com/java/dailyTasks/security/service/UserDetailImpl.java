@@ -22,36 +22,28 @@ public class UserDetailImpl implements UserDetails {
 
 
 	private static final long serialVersionUID = 1L;
-	
-	
-	private String email ;
+	private String email;
     private String password;
-    private Collection<? extends GrantedAuthority> authorities;
-//    private List<GrantedAuthority> authorities;
+    private List<GrantedAuthority> authorities;
 
-//    public UserDetailImpl(User user) {
-//        email=user.getEmail();
-//        password=user.getPassword();
-//        authorities= Arrays.stream(user.getRoles().split(","))
-//                .map(SimpleGrantedAuthority::new)
-//                .collect(Collectors.toList());
-//    }
-//    public UserDetailImpl(User user) {
-//        email = user.getEmail();
-//        password = user.getPassword();
-//        authorities = user.getRoles().stream()
-//            .map(role -> new SimpleGrantedAuthority(role.getType().name()))
-//            .collect(Collectors.toList());
-//    }
+  
 
-    public static UserDetailImpl build(User user) {
-	     List<SimpleGrantedAuthority> authorities =   user.getRoles()
-	    		 										   .stream()
-	    		 										   . map(role->new SimpleGrantedAuthority(role.getType().name()))
-	    		 										   .collect(Collectors.toList());											
-	    		 																																					
-	     return new UserDetailImpl(user.getEmail(), user.getPassword(), authorities);
-}
+    public UserDetailImpl(User user) {
+        email = user.getEmail();
+        password = user.getPassword();
+        authorities = user.getRoles().stream()
+            .map(role -> new SimpleGrantedAuthority(role.getType().name()))
+            .collect(Collectors.toList());
+    }
+
+//    public static UserDetailImpl build(User user) {
+//	     List<SimpleGrantedAuthority> authorities =   user.getRoles()
+//	    		 										   .stream()
+//	    		 										   . map(role->new SimpleGrantedAuthority(role.getType().name()))
+//	    		 										   .collect(Collectors.toList());											
+//	    		 																																					
+//	     return new UserDetailImpl(user.getEmail(), user.getPassword(), authorities);
+//}
     
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

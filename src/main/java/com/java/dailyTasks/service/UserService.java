@@ -1,6 +1,5 @@
 package com.java.dailyTasks.service;
 
-import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -94,19 +93,19 @@ Authentication authentication=	securityContext.getAuthentication();
 	}
 	
 	//------------------  get current user ------------------------
-   public User getCurrentUser() {
+   public Optional<User> getCurrentUser() {
 		
 		String email = getCurrentUserLogin().orElseThrow(()->
 		 new ResourceNotFoundException(ErrorMessage.PRINCIPAL_FOUND_MESSAGE));
-		User user =  getUserByEmail(email);
+		Optional<User> user =  getUserByEmail(email);
 		
 		return user ;
 		
 	}
  //------------------  get current userDTO ------------------------
    public UserDTO getPrincipal() {
-	 User currentUser =  getCurrentUser();
-	  // return userMapper.userToUserDTO(currentUser);
+	 User currentUser =  getCurrentUser().orElseThrow(()->
+	 new ResourceNotFoundException(ErrorMessage.PRINCIPAL_FOUND_MESSAGE));
 	  UserDTO userDTO = userMapper.userToUserDto(currentUser);
 	  return userDTO;
 
@@ -149,30 +148,30 @@ UserDTO userDTO =	userMapper.userToUserDto(user);
 	
 	
 //save user
-	public void createUser(UserRequest userRequest, String imageId) {
-
-
-UserDTO userDTO	=getUserById(userRequest.getId());
-	
-	User	user=userMapper.userDTOToUser(userDTO);
-	
-	
-	Image imageFile =getImage(imageId);
+//	public void createUser(UserRequest userRequest, String imageId) {
+//
+//
+//UserDTO userDTO	=getUserById(userRequest.getId());
+//	
+//	User	user=userMapper.userDTOToUser(userDTO);
+//	
+//	
+//	Image imageFile =imageService.findImageByImageId(imageId);
 	
 //	Integer usedUserImageCount= userRepository.findCountingById(imageFile);
 //		
 //	if (usedUserImageCount > 0) {
 //		throw new ResourceNotFoundException(ErrorMessage.IMAGE_USED_MESSAGE);
 //	}
-	
-		Set<Image> image = new HashSet<>();
-     	image.add(imageFile);
-		
-		user.setImage(image);
-		
-		userRepository.save(user);
-		
-	}
+//	
+//		Set<Image> image = new HashSet<>();
+//     	image.add(imageFile);
+//		
+//		user.setImage(image);
+//		
+//		userRepository.save(user);
+//		
+//	}
 	//update user
 	public UserDTO updateUser(String imageId, UserRequest userRequest) {
 
@@ -182,7 +181,7 @@ User user=userMapper.userRequestToUser(userRequest);
        if ((user==null)) {
     		new ResourceNotFoundException(String.format(ErrorMessage.EMAIL_IS_NOT_MATCH));
 	}
-       Image imageFile =getImage(imageId);
+       Image imageFile =imageService.findImageByImageId(imageId);
    
       
         Set<Image> image = new HashSet<>();
@@ -206,12 +205,19 @@ User user=userMapper.userRequestToUser(userRequest);
 //	}
 
 	//---------------- register user----------------------
-	public void saveUser(RegisterRequest registerRequest) {
+	public void saveUser(String imageId, RegisterRequest registerRequest) {
 		if(userRepository.existsByEmail(registerRequest.getEmail())) {
 			throw new ConflictException(String.format(ErrorMessage.EMAIL_ALREADY_EXIST_MESSAGE,registerRequest.getEmail()));
 		}
 		
-	Image img= getImage( registerRequest.getImageId());
+	Image img= imageService.findImageByImageId(imageId);
+	
+	Integer imageCountCheck = userRepository.findUserCountByImageId(img.getId());
+
+	if (imageCountCheck > 0) {
+		throw new ConflictException(ErrorMessage.IMAGE_USED_MESSAGE);
+	}
+	
 	Set<Image> image=new HashSet<>();
 	image.add(img);		
 		Role role = roleService.findByType(RoleType.ROLE_ANONYMOUS);
@@ -246,21 +252,19 @@ User user=userMapper.userRequestToUser(userRequest);
 
 //------------- find user by email-------------------
 
-	public User getUserByEmail(String email ) {
+	public Optional<User> getUserByEmail(String email ) {
 		
-		  User user  =  userRepository.findByEmail(email).orElseThrow(()->
-		  			new ResourceNotFoundException(String.format(ErrorMessage.USER_NOT_FOUND_MESSAGE, email))
-				);
+		  Optional<User> user  =  userRepository.findByEmail(email);
 		return user ;
 	}
 
 	
-	//------------ get image by string id ------------------
-public Image getImage (String id) {
-	Image imageFile =imageService.findImageByImageId(id);
-	return imageFile;
-}
-	
+	//------------ get image by string id ------------------  extra
+//public Image getImage (String id) {
+//	Image imageFile =imageService.findImageByImageId(id);
+//	return imageFile;
+//}
+//	
 	}
 	
 

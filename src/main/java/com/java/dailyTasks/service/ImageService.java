@@ -3,6 +3,7 @@ package com.java.dailyTasks.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.java.dailyTasks.domain.FileData;
@@ -18,6 +19,7 @@ import com.java.dailyTasks.utils.ImageUtils;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -37,10 +39,10 @@ public class ImageService {
 		private final String folder_path="C:\\Users\\user\\Pictures\\Saved Pictures";
 		
 		public String uploadImage(MultipartFile file) throws IOException {
-
+			String fileName= StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
 
 			Image imageData = imageRepository.save(Image.builder()
-					           .name(file.getOriginalFilename())
+					           .name(fileName)
 					           .type(file.getContentType())
 					           .data(ImageUtils.compressImage(file.getBytes()))
 					           .build());
@@ -55,8 +57,8 @@ public class ImageService {
 //--------------------------------------------------------------------------------------------
 
     public byte[] getImage(String id) {
-        Optional<Image> dbImageData = Optional.of(imageRepository.findImageById(id).orElseThrow(()->new ResourceNotFoundException(String.format(ErrorMessage.RESOURCE_NOT_FOUND_MESSAGE,true))));
-        byte[] images = ImageUtils.decompressImage(dbImageData.get().getData());
+        Image dbImageData = imageRepository.findImageById(id).orElseThrow(()->new ResourceNotFoundException(String.format(ErrorMessage.RESOURCE_NOT_FOUND_MESSAGE,true)));
+       byte[] images = ImageUtils.decompressImage(dbImageData.getData());
         return images;
     }
 //--------------------------------------------------------------------------------------------

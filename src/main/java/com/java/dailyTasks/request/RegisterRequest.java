@@ -37,23 +37,23 @@ public class RegisterRequest {
 	@NotBlank(message="Please provide your password")
 	private String password;
 	
-	 @Pattern(regexp = "^((\\(\\d{3}\\))|\\d{3})[- .]?\\d{3}[- .]?\\d{4}$", //(541) 317-8828
-	            message = "Please provide valid phone number")
-	@Size(min=14, max=14)
-    @NotBlank(message = "Please provide your phone number")
-	private String phoneNumber;
-	
+//	 @Pattern(regexp = "^((\\(\\d{3}\\))|\\d{3})[- .]?\\d{3}[- .]?\\d{4}$", //(541) 317-8828
+//	            message = "Please provide valid phone number")
+//	@Size(min=14, max=14)
+//    @NotBlank(message = "Please provide your phone number")
+//	private String phoneNumber;
+//	
     @Size(max= 100)
     @NotBlank(message = "Please provide your address")
 	private String address;
 
 	
-    @CreationTimestamp
-    private LocalDateTime createAt;
+//    @CreationTimestamp
+//    private LocalDateTime createAt;
 
-    @UpdateTimestamp
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
-    private LocalDateTime updateAt;
+//    @UpdateTimestamp
+//    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
+//    private LocalDateTime updateAt;
 
     private Set<String> image;
 

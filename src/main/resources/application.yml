@@ -57,7 +57,7 @@ management:
    # secretkey
 furkanVakfiChat :
  app :
-  SECRETKEY : furkanVakfiChat@!Aylaadem233
+  SECRETKEY : visionRent@!23 #furkanVakfiChat@!Aylaadem233
   JwtExpirationMs : 86400000 #bu rakam bir gune tekabul ediyor yani 24saat/milisanie
 
 
