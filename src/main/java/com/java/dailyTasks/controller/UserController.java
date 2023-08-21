@@ -79,17 +79,17 @@ public class UserController {
 		
 	}
 	// create user
-//	@PostMapping("/admin/{imageId}")
-//	
-//	public ResponseEntity<Response> createUser(@Validated  @RequestBody  UserRequest userRequest, @PathVariable String imageId) {
-//		userService.createUser(userRequest, imageId);
-//		Response response = new  Response();
-//		response.setMessage(ResponseMessage.USER_CREATED);
-//		response.setSuccess(true);
-//		return ResponseEntity.ok(response);
-//		
-//		
-//	}
+	@PostMapping("/admin/{imageId}")
+	
+	public ResponseEntity<Response> createUser(@Validated  @RequestBody  UserRequest userRequest, @PathVariable String imageId) {
+		userService.createUser(userRequest, imageId);
+		Response response = new  Response();
+		response.setMessage(ResponseMessage.USER_CREATED);
+		response.setSuccess(true);
+		return ResponseEntity.ok(response);
+		
+		
+	}
 	@PutMapping("/{imageId}")
 	
 	public ResponseEntity<UserDTO> upDateUser(@Validated @PathVariable String imageId, @RequestBody UserRequest userRequest){

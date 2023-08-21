@@ -39,14 +39,15 @@ public class ImageService {
 		private final String folder_path="C:\\Users\\user\\Pictures\\Saved Pictures";
 		
 		public String uploadImage(MultipartFile file) throws IOException {
-			String fileName= StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
+
 
 			Image imageData = imageRepository.save(Image.builder()
-					           .name(fileName)
+					           .name(file.getOriginalFilename())
 					           .type(file.getContentType())
 					           .data(ImageUtils.compressImage(file.getBytes()))
 					           .build());
 			if(imageData!=null){
+
 
 				return new Response(ResponseMessage.IMAGE_SAVED_RESPONSE_MESSAGE, true) + file.getOriginalFilename();
 
@@ -69,7 +70,7 @@ public class ImageService {
 	}
 
 	public Image findImageByImageId(String id) {
-		return imageRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException(String.format(ErrorMessage.RESOURCE_NOT_FOUND_MESSAGE,true)));
+		return imageRepository.findImageById(id).orElseThrow(()-> new ResourceNotFoundException(String.format(ErrorMessage.RESOURCE_NOT_FOUND_MESSAGE,id)));
 
 	}
 

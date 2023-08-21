@@ -148,30 +148,30 @@ UserDTO userDTO =	userMapper.userToUserDto(user);
 	
 	
 //save user
-//	public void createUser(UserRequest userRequest, String imageId) {
-//
-//
-//UserDTO userDTO	=getUserById(userRequest.getId());
-//	
-//	User	user=userMapper.userDTOToUser(userDTO);
-//	
-//	
-//	Image imageFile =imageService.findImageByImageId(imageId);
+	public void createUser(UserRequest userRequest, String imageId) {
+
+
+UserDTO userDTO	=getUserById(userRequest.getId());
 	
+	User	user=userMapper.userDTOToUser(userDTO);
+	
+	
+	Image imageFile =imageService.findImageByImageId(imageId);
+//	
 //	Integer usedUserImageCount= userRepository.findCountingById(imageFile);
 //		
 //	if (usedUserImageCount > 0) {
 //		throw new ResourceNotFoundException(ErrorMessage.IMAGE_USED_MESSAGE);
 //	}
-//	
-//		Set<Image> image = new HashSet<>();
-//     	image.add(imageFile);
-//		
-//		user.setImage(image);
-//		
-//		userRepository.save(user);
-//		
-//	}
+	
+		Set<Image> image = new HashSet<>();
+     	image.add(imageFile);
+		
+		user.setImage(image);
+		
+		userRepository.save(user);
+		
+	}
 	//update user
 	public UserDTO updateUser(String imageId, UserRequest userRequest) {
 
@@ -186,7 +186,7 @@ User user=userMapper.userRequestToUser(userRequest);
       
         Set<Image> image = new HashSet<>();
         image.add(imageFile);
-        user.setImage(image);
+        user.setImage( image);
        
 	 userRepository.save(user);
 	         
@@ -212,6 +212,7 @@ User user=userMapper.userRequestToUser(userRequest);
 		
 	Image img= imageService.findImageByImageId(imageId);
 	
+
 	Integer imageCountCheck = userRepository.findUserCountByImageId(img.getId());
 
 	if (imageCountCheck > 0) {
@@ -226,21 +227,25 @@ User user=userMapper.userRequestToUser(userRequest);
 		roles.add(role);
 		
 		String encodedPassword =  passwordEncoder.encode(registerRequest.getPassword());
+
 		
+//	User user=	userMapper.registerUserToUser(registerRequest);
 		User user = new User();
 		user.setImage(image);
+		user.setRoles(roles);
+		user.setPassword(encodedPassword);
 		user.setFirstName(registerRequest.getFirstName());
 		user.setLastName(registerRequest.getLastName());
 		user.setEmail(registerRequest.getEmail());
-		user.setPassword(encodedPassword);
-//		user.setCreateAt(LocalDateTime.now());
-//		user.setUpdateAt(registerRequest.getUpdateAt());
-		user.setAddress(registerRequest.getAddress());
-		user.setRoles(roles);
+//		user.setAddress(registerRequest.getAddress());
+////		user.setCreateAt(LocalDateTime.now());
+////		user.setUpdateAt(registerRequest.getUpdateAt());
 		
+//		
 		userRepository.save(user);
 		
 	}
+	
 		
 	
 

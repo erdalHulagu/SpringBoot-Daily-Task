@@ -4,7 +4,6 @@ server:
   include-binding-errors: always
   include-message: always
   include-stacktrace: never
-  
 spring: 
  main:
   allow-circular-references: true # 8 ve 9 yeni eklendi
@@ -12,10 +11,13 @@ spring:
   serialization: 
    write-dates-as-timestamps: false
  datasource:
+  hikari:
+   autoCommit : false
   url: jdbc:postgresql://localhost:5432/furkanVakfiChat
   username: furkanVakfi
   password: aylaadem233
   driver-class-name: org.postgresql.Driver
+  
  jpa:
   hibernate: 
    ddl-auto: update
@@ -26,8 +28,8 @@ spring:
   #image
  servlet:
   multipart:
-   max-file-size: 2MB
-   max-request-size: 2MB
+   max-file-size: 30MB
+   max-request-size: 30MB
  mail:
   host: smtp.gmail.com
   port: 587
