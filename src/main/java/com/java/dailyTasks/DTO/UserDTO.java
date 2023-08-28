@@ -3,6 +3,8 @@ package com.java.dailyTasks.DTO;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 import com.java.dailyTasks.domain.Role;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,7 +18,7 @@ import lombok.Setter;
 
 public class UserDTO {
 
-
+private Long id;
 
 private String firstName;
 
@@ -30,7 +32,7 @@ private String password;
 //
 ////private String phone;
 //
-//private LocalDateTime createAt;
+private LocalDateTime createAt;
 
 private String address;
 
@@ -39,17 +41,17 @@ private Set<String> image;
 
 private  Set<String> roles ;
 
-//public void setRoles(Set<Role> roles) {
-//	
-//	Set<String> roleStr = new HashSet<>();
-//	
-//	roles.forEach( r-> {
-//		roleStr.add(r.getType().getName()); // Administrator veya Customer gözükecek
-//		
-//	}); 
-//	
-//	this.roles = roleStr;
-//}
+public void setRoles(Set<Role> roles) {
+	
+	Set<String> roleStr = new HashSet<>();
+	
+	roles.forEach( r-> {
+		roleStr.add(r.getType().getName()); // Administrator veya Customer gözükecek
+		
+	}); 
+	
+	this.roles = roleStr;
+}
 
 
 	

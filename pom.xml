@@ -111,16 +111,16 @@
            <artifactId>jquery</artifactId>
             <version>3.1.0</version>
            </dependency>
-
+        <dependency>
         <!--______________ spring devtools ___________-->
-		<dependency>
+		
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
 			<scope>runtime</scope>
 			<optional>true</optional>
 		</dependency>
 		
-		<!--_____________ My SQL data base____________-->
+		<!--_____________ postgresql data base____________-->
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>

@@ -13,26 +13,21 @@ import com.java.dailyTasks.domain.User;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
-	@EntityGraph(attributePaths = "roles")
+
+	@EntityGraph(attributePaths = "roles")     //	@EntityGraph(attributePaths = "image")
 	Optional<User> findByEmail(String email);
 
-	@EntityGraph(attributePaths = "image")
+	@EntityGraph(attributePaths = "role")
 	Optional<User>  findById(Long id);
 
-	@EntityGraph(attributePaths = { "image"})
+
+	@EntityGraph(attributePaths = "role") //	@EntityGraph(attributePaths = "image")
 	List<User> findAll();
 
 	Boolean existsByEmail(String email);
 
 	@Query( "SELECT count(*) from User u join u.image img where img.id=:id")
 	Integer findUserCountByImageId(String id);
-
-	
-	
-	
-
-//	@Query( "SELECT count(*) from User u join u.image img where img.id=:id")
-//	Integer findCountingById(@Param("id") Image imageFile );
 
 
 

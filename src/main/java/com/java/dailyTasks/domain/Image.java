@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.Type;
 
 import jakarta.persistence.Column;

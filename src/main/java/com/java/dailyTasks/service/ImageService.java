@@ -39,26 +39,27 @@ public class ImageService {
 		private final String folder_path="C:\\Users\\user\\Pictures\\Saved Pictures";
 		
 		public String uploadImage(MultipartFile file) throws IOException {
+			String fileName= StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
 
-
-			Image imageData = imageRepository.save(Image.builder()
-					           .name(file.getOriginalFilename())
-					           .type(file.getContentType())
-					           .data(ImageUtils.compressImage(file.getBytes()))
-					           .build());
+		Image image=	Image.builder()
+	           .name(fileName)
+	           .type(file.getContentType())
+	           .data(ImageUtils.compressImage(file.getBytes()))
+	           .build();
+			Image imageData = imageRepository.save(image);
 			if(imageData!=null){
 
 
 				return new Response(ResponseMessage.IMAGE_SAVED_RESPONSE_MESSAGE, true) + file.getOriginalFilename();
 
 		  }
-	     return null;
+	     return image.getId();
 	   }
  
 //--------------------------------------------------------------------------------------------
 
     public byte[] getImage(String id) {
-        Image dbImageData = imageRepository.findImageById(id).orElseThrow(()->new ResourceNotFoundException(String.format(ErrorMessage.RESOURCE_NOT_FOUND_MESSAGE,true)));
+        Image dbImageData = imageRepository.findImageById(id).orElseThrow(()->new ResourceNotFoundException(String.format(ErrorMessage.RESOURCE_NOT_FOUND_MESSAGE,id)));
        byte[] images = ImageUtils.decompressImage(dbImageData.getData());
         return images;
     }

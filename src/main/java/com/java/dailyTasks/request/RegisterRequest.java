@@ -1,6 +1,9 @@
 package com.java.dailyTasks.request;
 
+import java.time.LocalDateTime;
 import java.util.Set;
+
+import org.hibernate.annotations.CreationTimestamp;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -45,8 +48,8 @@ public class RegisterRequest {
 	private String address;
 
 	
-//    @CreationTimestamp
-//    private LocalDateTime createAt;
+    @CreationTimestamp
+    private LocalDateTime createAt;
 
 //    @UpdateTimestamp
 //    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")

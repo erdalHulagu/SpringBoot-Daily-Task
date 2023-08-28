@@ -1,5 +1,6 @@
 package com.java.dailyTasks.service;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -11,7 +12,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import com.java.dailyTasks.DTO.UserDTO;
 import com.java.dailyTasks.domain.Image;
 import com.java.dailyTasks.domain.Role;
@@ -24,6 +24,8 @@ import com.java.dailyTasks.mapper.UserMapper;
 import com.java.dailyTasks.repository.UserRepository;
 import com.java.dailyTasks.request.RegisterRequest;
 import com.java.dailyTasks.request.UserRequest;
+import com.java.dailyTasks.security.config.SecurityUtils;
+import com.java.dailyTasks.utils.ImageUtils;
 
 
 @Service
@@ -93,24 +95,24 @@ Authentication authentication=	securityContext.getAuthentication();
 	}
 	
 	//------------------  get current user ------------------------
-   public Optional<User> getCurrentUser() {
+public User getCurrentUser() {
 		
-		String email = getCurrentUserLogin().orElseThrow(()->
+		String email = SecurityUtils.getCurrentUserLogin().orElseThrow(()->
 		 new ResourceNotFoundException(ErrorMessage.PRINCIPAL_FOUND_MESSAGE));
-		Optional<User> user =  getUserByEmail(email);
-		
+		User user =  getUserByEmail(email);
 		return user ;
 		
 	}
  //------------------  get current userDTO ------------------------
    public UserDTO getPrincipal() {
-	 User currentUser =  getCurrentUser().orElseThrow(()->
-	 new ResourceNotFoundException(ErrorMessage.PRINCIPAL_FOUND_MESSAGE));
-	  UserDTO userDTO = userMapper.userToUserDto(currentUser);
-	  return userDTO;
-
+		 User currentUser =  getCurrentUser();
+		  // return userMapper.userToUserDTO(currentUser);
+		  UserDTO userDTO = userMapper.userToUserDto(currentUser);
+		  return userDTO;
 	
-}
+		
+	}
+
 	
 	
 	
@@ -147,46 +149,66 @@ UserDTO userDTO =	userMapper.userToUserDto(user);
 	}
 	
 	
-//save user
-	public void createUser(UserRequest userRequest, String imageId) {
-
-
-UserDTO userDTO	=getUserById(userRequest.getId());
-	
-	User	user=userMapper.userDTOToUser(userDTO);
-	
-	
-	Image imageFile =imageService.findImageByImageId(imageId);
+////save user
+//	public void createUser(UserRequest userRequest, String imageId) {
+//
+//
+//UserDTO userDTO	=getUserById(userRequest.getId());
 //	
-//	Integer usedUserImageCount= userRepository.findCountingById(imageFile);
+//	User	user=userMapper.userDTOToUser(userDTO);
+//	
+//	Role role = roleService.findByType(RoleType.ROLE_ADMIN);
+//
+//    Set<Role> roles = new HashSet<>();
+//    roles.add(role);
+//    user.setRoles(roles);
+//	Image imageFile =imageService.findImageByImageId(imageId);
+//	
+//	Integer usedUserImageCount= userRepository.findUserCountByImageId(imageFile);
 //		
 //	if (usedUserImageCount > 0) {
 //		throw new ResourceNotFoundException(ErrorMessage.IMAGE_USED_MESSAGE);
 //	}
-	
-		Set<Image> image = new HashSet<>();
-     	image.add(imageFile);
-		
-		user.setImage(image);
-		
-		userRepository.save(user);
-		
-	}
+//	
+//     Set<Image> image = new HashSet<>();
+//     	 byte[] images = ImageUtils.decompressImage(imageFile.getData());
+//        imageFile.setData(images);
+//		image.add(imageFile);
+//		user.setImage(image);
+//		
+//		userRepository.save(user);
+//		
+//	}
 	//update user
 	public UserDTO updateUser(String imageId, UserRequest userRequest) {
 
 User user=userMapper.userRequestToUser(userRequest);
-		
+
+
 
        if ((user==null)) {
     		new ResourceNotFoundException(String.format(ErrorMessage.EMAIL_IS_NOT_MATCH));
+    		
 	}
-       Image imageFile =imageService.findImageByImageId(imageId);
-   
-      
-        Set<Image> image = new HashSet<>();
-        image.add(imageFile);
-        user.setImage( image);
+       Role role = roleService.findByType(RoleType.ROLE_ANONYMOUS);
+
+       Set<Role> roles = new HashSet<>();
+       roles.add(role);
+       user.setRoles(roles);
+       byte[] imgByt= imageService.getImage(imageId);
+       
+       Image img = new Image();
+       img.setData(imgByt);
+
+   	   Integer imageCountCheck = userRepository.findUserCountByImageId(img.getId());
+
+   	   if (imageCountCheck > 0) {
+   		throw new ConflictException(ErrorMessage.IMAGE_USED_MESSAGE);
+   	  }
+   		
+   		Set<Image> image=new HashSet<>();
+   		
+   		image.add(img);
        
 	 userRepository.save(user);
 	         
@@ -205,22 +227,25 @@ User user=userMapper.userRequestToUser(userRequest);
 //	}
 
 	//---------------- register user----------------------
-	public void saveUser(String imageId, RegisterRequest registerRequest) {
+	public void saveUser(String imageId,RegisterRequest registerRequest) {
 		if(userRepository.existsByEmail(registerRequest.getEmail())) {
 			throw new ConflictException(String.format(ErrorMessage.EMAIL_ALREADY_EXIST_MESSAGE,registerRequest.getEmail()));
 		}
 		
-	Image img= imageService.findImageByImageId(imageId);
-	
+	byte[] imgByt= imageService.getImage(imageId);
+	Image img = new Image();
+	img.setData(imgByt);
 
 	Integer imageCountCheck = userRepository.findUserCountByImageId(img.getId());
 
 	if (imageCountCheck > 0) {
 		throw new ConflictException(ErrorMessage.IMAGE_USED_MESSAGE);
 	}
-	
-	Set<Image> image=new HashSet<>();
-	image.add(img);		
+		
+		Set<Image> image=new HashSet<>();
+		
+		image.add(img);
+		
 		Role role = roleService.findByType(RoleType.ROLE_ANONYMOUS);
 		
 		Set<Role> roles = new HashSet<>();
@@ -229,7 +254,7 @@ User user=userMapper.userRequestToUser(userRequest);
 		String encodedPassword =  passwordEncoder.encode(registerRequest.getPassword());
 
 		
-//	User user=	userMapper.registerUserToUser(registerRequest);
+
 		User user = new User();
 		user.setImage(image);
 		user.setRoles(roles);
@@ -237,16 +262,15 @@ User user=userMapper.userRequestToUser(userRequest);
 		user.setFirstName(registerRequest.getFirstName());
 		user.setLastName(registerRequest.getLastName());
 		user.setEmail(registerRequest.getEmail());
-//		user.setAddress(registerRequest.getAddress());
-////		user.setCreateAt(LocalDateTime.now());
-////		user.setUpdateAt(registerRequest.getUpdateAt());
+		user.setAddress(registerRequest.getAddress());
+		user.setCreateAt(LocalDateTime.now());
 		
-//		
+	
 		userRepository.save(user);
 		
 	}
 	
-		
+//	User user=	userMapper.registerUserToUser(registerRequest);
 	
 
 	public void deleteUserWithId(Long id) {
@@ -256,13 +280,13 @@ User user=userMapper.userRequestToUser(userRequest);
 	}
 
 //------------- find user by email-------------------
-
-	public Optional<User> getUserByEmail(String email ) {
+	public User getUserByEmail(String email ) {
 		
-		  Optional<User> user  =  userRepository.findByEmail(email);
+		  User user  =  userRepository.findByEmail(email).orElseThrow(()->
+		  			new ResourceNotFoundException(String.format(ErrorMessage.USER_NOT_FOUND_MESSAGE, email))
+				);
 		return user ;
 	}
-
 	
 	//------------ get image by string id ------------------  extra
 //public Image getImage (String id) {

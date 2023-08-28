@@ -43,7 +43,7 @@ public class ImageController {
 	}
 
 	@Transactional
-		@GetMapping("/image/{id}")
+		@GetMapping("/display/{id}")
 		public ResponseEntity<byte[]> getImage(@PathVariable String id)throws IOException{
 			byte[] imageData=imageService.getImage(id);
 			

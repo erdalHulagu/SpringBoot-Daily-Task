@@ -1,6 +1,5 @@
 package com.java.dailyTasks.domain;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -11,15 +10,19 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
+
+import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -55,7 +58,7 @@ private String lastName;
 @Column(length = 80, nullable = false, unique=true)
 private String email;
 
-@Email(message = "Please provide valid email")
+
 @Size(min = 10, max = 80)
 @Column(length = 80, nullable = false, unique=true)
 private String password;
@@ -64,20 +67,20 @@ private String password;
 @NotBlank(message = "Please provide your address")
 @Column(length = 80, nullable = false, unique=true)
 private String address;
-
+//
 //@Pattern(regexp = "\\\\d{3}-\\\\d{3}-\\\\d{4}",	// 999-999-9999
 //message = "Please provide valid phone number" ) 
 //@Column(nullable = false)
 //private String phone;
-
+//
 //@UpdateTimestamp
 //@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
 //private LocalDateTime updateAt;
-
-
-//@Column(name = "create_at", updatable = false, nullable = true)
-//@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-//private LocalDateTime createAt;
+//
+//
+@Column(name = "create_at", updatable = false, nullable = true)
+@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+private LocalDateTime createAt;
 
 
 @OneToMany(fetch = FetchType.LAZY)
@@ -85,7 +88,7 @@ private String address;
 //@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY) // CascadeType.ALL: Eşleşen resim verisini silerken kullanıcıyı da siler
 @JoinColumn(name = "user_id")
 private Set<Image> image;
-//private Image image;
+
 
 
 @ManyToMany   // hibernate defaultta LAZY
@@ -93,6 +96,8 @@ private Set<Image> image;
 						 joinColumns = @JoinColumn(name="user_id"),
 						 inverseJoinColumns = @JoinColumn(name="role_id"))
 private  Set<Role> roles = new HashSet<>();
+
+
 
 }
 

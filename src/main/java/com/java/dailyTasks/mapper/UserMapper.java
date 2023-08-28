@@ -37,14 +37,13 @@ public interface UserMapper  {
 //	@Mapping(target = "image",source = "image",qualifiedByName = "getImageAsLong")
 	@Mapping(target = "image" , ignore = true )
 	@Mapping(target = "roles",ignore = true)
-	@Mapping(target = "password", ignore=true)
+//	@Mapping(target = "password", ignore=true)
 	User userRequestToUser(UserRequest userRequest);
 	
 
 
-//	@Mapping(target = "image",source = "image",qualifiedByName = "getImageAsString")
-	@Mapping(target = "image" , ignore = true )
-	@Mapping(target = "roles",source = "roles",qualifiedByName = "getRoleAsString")
+	@Mapping(target = "image",source = "image",qualifiedByName = "getImageAsString")
+	@Mapping(target = "roles",ignore = true)
 	UserDTO userToUserDto(User user);
 	
 	
